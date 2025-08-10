@@ -1,0 +1,36 @@
+{
+    "name": "name",
+    "service": "service-name",
+    "workspaceFolder": "/app",
+    "dockerComposeFile": "../docker-compose.yml",
+    // "postStartCommand": "pip install -r .build/repositories.txt && pip install -e .",
+    "postStartCommand": "bash ./.build/setup_gemini_auth.sh",
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "workbench.colorTheme": "Visual Studio Light",
+                "editor.formatOnSave": true,
+                "editor.formatOnType": true,
+                "editor.defaultFormatter": "ms-python.autopep8",
+                "git.enableSmartCommit": true,
+                "git.autofetch": true,
+                "github.copilot.editor.enableAutoCompletions": true
+            },
+            "extensions": [
+                "github.copilot",
+                "github.copilot-chat",
+                "github.remotehub",
+                "ms-ceintl.vscode-language-pack-ja",
+                "ms-python.autopep8",
+                "ms-python.debugpy",
+                "ms-python.flake8",
+                "ms-python.isort",
+                "ms-python.python",
+                "ms-python.vscode-pylance",
+                "ms-python.vscode-python-envs",
+                "redhat.vscode-yaml",
+                "shd101wyy.markdown-preview-enhanced"
+            ]
+        }
+    }
+}

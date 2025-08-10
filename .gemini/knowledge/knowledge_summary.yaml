@@ -1,0 +1,21 @@
+knowledge_base:
+- file: mcp_python_implementation_guide.md
+  summary: Gemini CLIの能力をModel Context Protocol (MCP) と .toml スラッシュコマンドを用いて拡張するための開発者向けガイド。カスタムツールの作成、CLIへの統合、セキュアな運用方法について解説します。
+  referenced_for:
+  - Gemini CLIのツール拡張アーキテクチャ（MCPサーバー, .tomlスラッシュコマンド）の理解
+  - .tomlファイルによるカスタムスラッシュコマンドの作成方法
+  - Python（FastMCP）を使用したMCPサーバーの開発とGemini CLIへの統合
+  - 開発したツールをGemini CLIで利用する具体的な手順
+  - Gemini CLIとMCP連携におけるセキュリティ上の脅威と対策
+- file: system_context_diagram_guide.md
+  summary: 戦略的アーキテクチャ成果物としてのシステムコンテキスト図の作成、品質、ライフサイクル管理に関する包括的ガイド。
+  referenced_for:
+  - システムコンテキスト図の基本原則、目的、戦略的価値の理解
+  - C4モデルにおけるコンテキスト図の位置づけの把握
+  - 「Diagram as Code」を用いたシステムコンテキスト図の持続可能な管理方法
+- file: competitive_benchmark_guide.md
+  summary: 仮説主導型リサーチと戦略的レポーティングに基づく競合ベンチマークの実践的ガイド。
+  referenced_for:
+  - 競合ベンチマーキングの戦略的アプローチと仮説設定方法の理解
+  - 競合を特定し、網羅的に情報を収集するためのフレームワークの活用
+  - 分析結果をインパクトのあるレポートにまとめ、組織の行動を促す方法

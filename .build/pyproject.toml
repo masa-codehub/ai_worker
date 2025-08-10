@@ -1,0 +1,166 @@
+# ===================================================================
+# 1. ビルドシステムの設定 (ほぼ常にこのままでOK)
+# ===================================================================
+# pipがこのプロジェクトをどのようにビルド・インストールすればよいかを定義します。
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+# ===================================================================
+# 2. プロジェクトの基本情報
+# ===================================================================
+# パッケージの「名札」となる部分です。
+[project]
+name = "ai_worker"
+version = "0.1.0"
+authors = [
+  { name="Your Name", email="your@email.com" },
+]
+description = ""
+readme = "README.md"
+requires-python = ">=3.13"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+# --- プロジェクトが動作するために必要なライブラリ ---
+dependencies = [
+    "numpy",
+    "pandas",
+    "joblib",
+    "pydantic",
+    "pyyaml",
+]
+
+# ===================================================================
+# 3. 開発・テスト時にのみ必要なライブラリ (推奨)
+# ===================================================================
+# これらはパッケージの利用者には不要ですが、開発には必要です。
+# pip install -e .[test] のようにインストールします。
+[project.optional-dependencies]
+test = [
+    "pytest",
+    "pytest-cov", # テストカバレッジを計測するツール
+]
+dev = [
+    "black",         # コードフォーマッター
+    "isort",         # importソート
+    "ruff",          # 高速リンター
+    "pytest",
+    "pytest-cov",
+    "pre-commit",    # Git フック管理
+]
+ml = [
+    "scikit-learn",  # 機械学習ライブラリ
+    "matplotlib",    # グラフ描画
+    "seaborn",       # 統計グラフ
+]
+
+# ===================================================================
+# 4. ツールごとの設定
+# ===================================================================
+
+# --- Black (コードフォーマッター) の設定 ---
+[tool.black]
+line-length = 88
+target-version = ['py313']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # ディレクトリを除外
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+# --- isort (importソート) の設定 ---
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
+known_first_party = ["ai_worker"]
+known_third_party = ["pandas", "numpy", "talib", "joblib", "pydantic", "yaml", "numba"]
+
+# --- Ruff (高速リンター) の設定 ---
+[tool.ruff]
+line-length = 88
+target-version = "py313"
+
+[tool.ruff.lint]
+# 有効にするルールセット
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "UP",  # pyupgrade
+    "N",   # pep8-naming
+]
+
+# 無視するルール
+ignore = [
+    "E501",  # line too long (Blackが処理)
+    "B008",  # do not perform function calls in argument defaults
+    "C901",  # too complex
+]
+
+# ファイル毎の除外設定
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["N802", "N803"]  # テストでは関数名・変数名の制約を緩和
+
+# --- pytestの設定 ---
+[tool.pytest.ini_options]
+# 最小バージョン指定
+minversion = "6.0"
+
+# テストディレクトリの指定
+testpaths = ["tests"]
+
+# テストファイルのパターン
+python_files = ["test_*.py", "*_test.py"]
+
+# テストクラスのパターン
+python_classes = ["Test*"]
+
+# テストメソッドのパターン
+python_functions = ["test_*"]
+
+# PYTHONPATHの設定（プロジェクトルートを含める）
+pythonpath = "."
+
+# 警告フィルター
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::PendingDeprecationWarning",
+    "ignore::UserWarning",
+]
+
+# 出力設定
+addopts = "-v --tb=short --strict-markers --cov=ai_worker --cov-report=term-missing"
+
+# カスタムマーカーの定義
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+]
+
+# テストセッション終了時の動作
+junit_family = "xunit2"
+
+# --- setuptoolsの設定 (パッケージを自動検出させる) ---
+[tool.setuptools.packages.find]
+where = ["."]  # プロジェクトのルートディレクトリを探す
+include = ["ai_worker*"]  # "ai_worker"で始まるディレクトリをパッケージとして含める
+exclude = ["tests*"]  # "tests"ディレクトリはパッケージに含めない
