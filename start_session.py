@@ -12,8 +12,15 @@ def setup_agent_directories(config: dict):
     """
     print("--- エージェントディレクトリのセットアップを開始します ---")
     agents = config.get("agents", {})
-    source_dir = pathlib.Path(config.get("source_dir"))
-    destination_dir = pathlib.Path(config.get("destination_dir"))
+    source_dir_path = config.get("source_dir")
+    destination_dir_path = config.get("destination_dir")
+
+    if not source_dir_path or not destination_dir_path:
+        print("エラー: 設定ファイルに 'source_dir' または 'destination_dir' が見つかりません。")
+        return
+
+    source_dir = pathlib.Path(source_dir_path)
+    destination_dir = pathlib.Path(destination_dir_path)
 
     if not source_dir.is_dir():
         print(f"エラー: ソースディレクトリ '{source_dir}' が見つかりません。")
@@ -25,7 +32,8 @@ def setup_agent_directories(config: dict):
 
     for agent_name, agent_config in agents.items():
         template_name = agent_config.get("template")
-        overwrite = agent_config.get("overwrite", False)  # Default to False
+        # デフォルトは False（上書きしない）
+        overwrite = agent_config.get("overwrite", False)
 
         if not template_name:
             print(f"警告: エージェント '{agent_name}' のテンプレートが指定されていません。スキップします。")
@@ -35,15 +43,17 @@ def setup_agent_directories(config: dict):
 
         print(f"エージェント '{agent_name}' をセットアップしています... (Overwrite: {overwrite})")
 
-        # Search for the template directory within the source directory
         template_path = None
         try:
-            found_paths = list(source_dir.rglob(f"{template_name}"))
-            if found_paths:
-                template_path = sorted(found_paths, key=lambda p: len(str(p)))[0]
-                if not template_path.is_dir():
-                    template_path = None
-        except Exception as e:
+            # テンプレート名をディレクトリとして再帰的に検索し、最もパスが短いものを選択します。
+            # これにより、トップレベルに近いテンプレートが優先されます。
+            found_dirs = [p for p in source_dir.rglob(template_name) if p.is_dir()]
+            if found_dirs:
+                template_path = min(found_dirs, key=lambda p: len(str(p)))
+                if len(found_dirs) > 1:
+                    print(f"  - 警告: テンプレート '{template_name}' が複数見つかりました。最短パスを選択します: {template_path}")
+
+        except OSError as e:
             print(f"  - テンプレート検索中にエラーが発生しました: {e}")
 
         if template_path and template_path.is_dir():
@@ -65,6 +75,18 @@ def setup_agent_directories(config: dict):
     print("--- エージェントディレクトリのセットアップが完了しました ---")
 
 
+
+
+def _find_active_pane(window, active_agent_name, layout_grid, panes_grid):
+    for r, row in enumerate(layout_grid):
+        for c, agent_name in enumerate(row):
+            if agent_name == active_agent_name:
+                try:
+                    return panes_grid[r][c]
+                except IndexError:
+                    print(f"警告: panes_gridのインデックス[{r}][{c}]が無効です。ペインの結合処理に問題がある可能性があります。")
+                    return None
+    return None
 
 
 def main():
@@ -129,22 +151,13 @@ def main():
 
     # --- 3. Activate and Attach ---
     if active_agent_name:
-        active_pane_found = False
-        for r, row_list in enumerate(layout_grid):
-            for c, agent_name in enumerate(row_list):
-                if agent_name == active_agent_name:
-                    try:
-                        active_pane = panes_grid[r][c]
-                        print(f"アクティブエージェント '{active_agent_name}' (Pane: {active_pane.pane_id}) を選択します。")
-                        window.select_pane(active_pane.pane_id)
-                        active_pane_found = True
-                        break
-                    except IndexError:
-                        print(f"警告: panes_gridのインデックス[{r}][{c}]が無効です。ペインの結合処理に問題がある可能性があります。")
-                        pass
-            if active_pane_found:
-                break
-        if not active_pane_found:
+        active_pane = _find_active_pane(
+            window, active_agent_name, layout_grid, panes_grid)
+        if active_pane:
+            print(
+                f"アクティブエージェント '{active_agent_name}' (Pane: {active_pane.pane_id}) を選択します。")
+            window.select_pane(active_pane.pane_id)
+        else:
             print(f"警告: アクティブエージェント '{active_agent_name}' がレイアウトに見つかりませんでした。")
 
     print("セッションの準備ができました。アタッチします...")
