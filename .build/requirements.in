@@ -18,6 +18,7 @@ libtmux
 pip-tools               # requirements.in から requirements.txt を生成するツール
 pytest                  # テストフレームワーク
 pytest-cov              # pytest 用のカバレッジ測定ツール
+flake8                  # コードスタイルチェックツール
 
 # 他に必要な開発ツールがあれば以下に追加
 #例:
