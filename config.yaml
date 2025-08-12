@@ -1,0 +1,20 @@
+# --- Agent Definitions ---
+agents:
+  Agent1.template: marketing_research
+  Agent2.template: lateral_thinking
+  Agent3.template: software_engineer
+
+# --- Directory Settings ---
+source_dir: /app/ai_worker
+destination_dir: /app/works
+
+# --- Tmux Session Settings ---
+session_name: Pro-Session
+active_agent: Agent1
+
+# --- Tmux Layout Definition ---
+# 同じエージェント名を隣接させると、ペインが結合されます。
+layout_grid:
+  - ["Agent1"]
+  - ["Agent2"]
+  - ["Agent3"]

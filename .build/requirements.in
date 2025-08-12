@@ -9,6 +9,7 @@ mcp[cli,server]  # mcp の CLI とサーバー機能を使用するため
 filelock
 requests
 pyyaml
+libtmux
 
 # --- Development Dependencies ---
 # 開発時にのみ使用するツール (テスト, Lint, Format, 依存関係管理等)

@@ -7,6 +7,7 @@ WORKDIR /app
 # RUN命令を一つにまとめることでDockerイメージのレイヤー数を削減
 RUN apt-get update && \
     apt-get install -y git && \
+    apt-get install -y tmux && \
     apt-get install -y gpg && \
     apt-get install -y wget && \
     apt-get install -y curl && \
