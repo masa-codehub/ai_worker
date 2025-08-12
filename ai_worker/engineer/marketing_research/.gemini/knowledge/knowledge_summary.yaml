@@ -1,0 +1,44 @@
+knowledge_base:
+- file: mcp_python_implementation_guide.md
+  summary: Gemini CLIの能力をModel Context Protocol (MCP) と .toml スラッシュコマンドを用いて拡張するための開発者向けガイド。カスタムツールの作成、CLIへの統合、セキュアな運用方法について解説します。
+  referenced_for:
+  - Gemini CLIのツール拡張アーキテクチャ（MCPサーバー, .tomlスラッシュコマンド）の理解
+  - .tomlファイルによるカスタムスラッシュコマンドの作成方法
+  - Python（FastMCP）を使用したMCPサーバーの開発とGemini CLIへの統合
+  - 開発したツールをGemini CLIで利用する具体的な手順
+  - Gemini CLIとMCP連携におけるセキュリティ上の脅威と対策
+- file: system_context_diagram_guide.md
+  summary: 戦略的アーキテクチャ成果物としてのシステムコンテキスト図の作成、品質、ライフサイクル管理に関する包括的ガイド。
+  referenced_for:
+  - システムコンテキスト図の基本原則、目的、戦略的価値の理解
+  - C4モデルにおけるコンテキスト図の位置づけの把握
+  - 「Diagram as Code」を用いたシステムコンテキスト図の持続可能な管理方法
+- file: competitive_benchmark_guide.md
+  summary: 仮説主導型リサーチと戦略的レポーティングに基づく競合ベンチマークの実践的ガイド。
+  referenced_for:
+  - 競合ベンチマーキングの戦略的アプローチと仮説設定方法の理解
+  - 競合を特定し、網羅的に情報を収集するためのフレームワークの活用
+  - 分析結果をインパクトのあるレポートにまとめ、組織の行動を促す方法
+- file: ai_communication_evolution.md
+  summary: AIエージェント間の通信プロトコルの標準化（A2A, ACP）、学習による創発的コミュニケーション（MARL）、そして両者を統合したハイブリッドな未来像について解説した技術レポート。
+  referenced_for:
+  - AIエージェント間通信の標準プロトコル（Google A2A, IBM ACP）とツール連携プロトコル（Anthropic MCP）の比較と理解
+  - 強化学習（MARL）や創発的コミュニケーションによる、エージェントが自律的に言語を学習するアプローチの把握
+  - 固定プロトコルと学習されるコミュニケーションを組み合わせた、将来のハイブリッドなエージェントアーキテクチャの展望
+  - エージェントの対話を人間が解釈可能にする「グラウンディング」の重要性の理解
+- file: symbiotic_terminal_tmux_gemini_cli.md
+  summary: ターミナルマルチプレクサtmuxとAIエージェントGemini CLIを組み合わせ、開発者のワークフローを劇的に効率化する方法を詳述したガイド。tmuxの基本から応用、Gemini CLIの能力とセットアップ、そして両者を連携させた実践的なワークフロー（AI支援IDE、並列プロンプト、スクリプトによる自動化）までを網羅的に解説し、推奨設定ファイルを提供する。
+  referenced_for:
+  - tmuxの基本的な概念（セッション、ウィンドウ、ペイン）と操作方法の習得
+  - .tmux.confによるtmuxのカスタマイズとTPMによるプラグイン管理
+  - Gemini CLIのエージェントとしての能力と基本的な利用方法の理解
+  - tmuxとGemini CLIを連携させた高度な開発ワークフローの実装
+  - AI駆動開発に最適化された.tmux.conf設定の入手
+- file: python_script_tmux_join_pane_silent_failure.md
+  summary: Pythonスクリプトから`tmux join-pane`コマンドを実行した際に発生する「サイレントフェイラー（エラー表示なく失敗する現象）」について、その原因を深く分析し、包括的な対策を提示する技術レポート。tmuxのクライアント・サーバーモデルと、スクリプト実行環境における疑似ターミナル（TTY）の欠如が問題の根源であることを、`strace`によるシステムコール分析などを通じて解明します。対策として、`subprocess`の直接利用を避け、公式ライブラリ`libtmux`の使用を最善策として推奨し、代替案としてレイアウト構築戦略の見直しや、最終手段としてのTTY強制割り当てについても解説しています。
+  referenced_for:
+  - Pythonスクリリプトからtmuxを操作する際のサイレントフェイラーの原因理解
+  - tmuxのクライアント・サーバーアーキテクチャとTTYの役割の把握
+  - straceを用いたtmuxのデバッグと問題診断方法
+  - subprocessの問題を回避し、信頼性の高いtmux自動化を実現するためのlibtmuxの利用
+  - join-paneに依存しない、堅牢なtmuxレイアウト構築戦略
