@@ -2,12 +2,78 @@ import libtmux
 import yaml
 import pathlib
 import time
+import shutil
+
+
+def setup_agent_directories(config: dict):
+    """
+    Sets up agent directories based on the provided configuration.
+    It copies template directories to the destination directory.
+    """
+    print("--- エージェントディレクトリのセットアップを開始します ---")
+    agents = config.get("agents", {})
+    source_dir = pathlib.Path(config.get("source_dir"))
+    destination_dir = pathlib.Path(config.get("destination_dir"))
+
+    if not source_dir.is_dir():
+        print(f"エラー: ソースディレクトリ '{source_dir}' が見つかりません。")
+        return
+
+    if not destination_dir.exists():
+        print(f"デスティネーションディレクトリ '{destination_dir}' を作成します。")
+        destination_dir.mkdir(parents=True)
+
+    for agent_name, agent_config in agents.items():
+        template_name = agent_config.get("template")
+        overwrite = agent_config.get("overwrite", False)  # Default to False
+
+        if not template_name:
+            print(f"警告: エージェント '{agent_name}' のテンプレートが指定されていません。スキップします。")
+            continue
+
+        destination_path = destination_dir / agent_name
+
+        print(f"エージェント '{agent_name}' をセットアップしています... (Overwrite: {overwrite})")
+
+        # Search for the template directory within the source directory
+        template_path = None
+        try:
+            found_paths = list(source_dir.rglob(f"{template_name}"))
+            if found_paths:
+                template_path = sorted(found_paths, key=lambda p: len(str(p)))[0]
+                if not template_path.is_dir():
+                    template_path = None
+        except Exception as e:
+            print(f"  - テンプレート検索中にエラーが発生しました: {e}")
+
+        if template_path and template_path.is_dir():
+            if destination_path.exists():
+                if not overwrite:
+                    print(f"  - 既存のディレクトリ '{destination_path}' が存在するためスキップします。")
+                    continue
+
+                print(f"  - 既存のディレクトリ '{destination_path}' を削除します。")
+                shutil.rmtree(destination_path)
+
+            print(f"  - テンプレート '{template_name}' を '{template_path}' からコピーします。")
+            shutil.copytree(template_path, destination_path)
+            print(f"  - '{destination_path}' へのコピーが完了しました。")
+        else:
+            print(
+                f"  - 警告: テンプレートディレクトリ '{template_name}' が '{source_dir}' 内に見つかりませんでした。"
+            )
+    print("--- エージェントディレクトリのセットアップが完了しました ---")
+
+
 
 
 def main():
     config_path = pathlib.Path(__file__).parent / "config.yaml"
     with open(config_path, 'r') as f:
         config = yaml.safe_load(f)
+
+    # Setup agent directories before creating tmux session
+    setup_agent_directories(config)
 
     session_name = config.get("session_name", "default_session")
     active_agent_name = config.get("active_agent", "")
@@ -63,8 +129,23 @@ def main():
 
     # --- 3. Activate and Attach ---
     if active_agent_name:
-        # ... (omitted for brevity, same as before)
-        pass
+        active_pane_found = False
+        for r, row_list in enumerate(layout_grid):
+            for c, agent_name in enumerate(row_list):
+                if agent_name == active_agent_name:
+                    try:
+                        active_pane = panes_grid[r][c]
+                        print(f"アクティブエージェント '{active_agent_name}' (Pane: {active_pane.pane_id}) を選択します。")
+                        window.select_pane(active_pane.pane_id)
+                        active_pane_found = True
+                        break
+                    except IndexError:
+                        print(f"警告: panes_gridのインデックス[{r}][{c}]が無効です。ペインの結合処理に問題がある可能性があります。")
+                        pass
+            if active_pane_found:
+                break
+        if not active_pane_found:
+            print(f"警告: アクティブエージェント '{active_agent_name}' がレイアウトに見つかりませんでした。")
 
     print("セッションの準備ができました。アタッチします...")
     session.attach_session()

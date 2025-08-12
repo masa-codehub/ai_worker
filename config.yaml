@@ -1,10 +1,17 @@
 # --- Agent Definitions ---
 agents:
-  Agent1.template: marketing_research
-  Agent2.template: lateral_thinking
-  Agent3.template: software_engineer
+  Agent1:
+    template: marketing_research
+    overwrite: true
+  Agent2:
+    template: lateral_thinking
+    overwrite: false
+  Agent3:
+    template: software_engineer
+    # If overwrite is not specified, it defaults to false.
 
 # --- Directory Settings ---
+# The global overwrite_existing_agents is no longer needed.
 source_dir: /app/ai_worker
 destination_dir: /app/works
 
