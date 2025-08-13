@@ -9,3 +9,23 @@ a1で回答を生成、a2,a3,a4がレビューを実施、レビュー結果が�
 スクリプトを起動して、チームフォルダにエージェントフォルダを自動生成する。
 エージェントフォルダの中身は.gemini/とコンテキストと実行スクリプト
 A2Aのコミュニケーションの場所が作られて、
+
+
+User → President : 指示やアドバイス、苦言
+President → Manager : 実装のループ
+
+Manager
+1. documentを参照する
+2. 業務を分解する。
+3. 分解した内容をConsultingチームに渡す
+4. Consultingチームから得た結果をBacklogに変換し、Engineeringチームに渡す
+5. Engineeringチームが実装し、レポートをConsultingチームに渡してレビュー
+6. 結果を
+
+Engineer
+1. 修正・作成したファイル名、パス
+2. 概要
+
+Consulting
+1. 状況見て、改善案を提案する
+2. 
