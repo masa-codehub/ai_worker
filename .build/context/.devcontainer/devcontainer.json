@@ -4,7 +4,7 @@
     "workspaceFolder": "/app",
     "dockerComposeFile": "../docker-compose.yml",
     // "postStartCommand": "pip install -r .build/repositories.txt && pip install -e .",
-    "postStartCommand": "bash ./.build/setup_gemini_auth.sh",
+    "updateContentCommand": "bash ./.build/setup_gemini_auth.sh",
     "customizations": {
         "vscode": {
             "settings": {

@@ -2,7 +2,7 @@
 agents:
   Agent1:
     template: marketing_research
-    overwrite: true
+    overwrite: false
   Agent2:
     template: lateral_thinking
     overwrite: false
@@ -24,4 +24,3 @@ active_agent: Agent1
 layout_grid:
   - ["Agent1"]
   - ["Agent2"]
-  - ["Agent3"]
